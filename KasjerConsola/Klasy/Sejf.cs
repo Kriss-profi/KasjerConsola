@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace KasjerConsola.Klasy
 {
+   // bez polskich liter!
+   // uzycie Properties - setter and getter zamiast Zmien/stan
     public class Sejf
     {
         //public decimal N50000;
+        // to mozna zamienic na liste albo tablice
         Nominał N50000 = new Nominał((decimal)500.00);
         Nominał N20000 = new Nominał((decimal)200.00);
         Nominał N10000 = new Nominał((decimal)100.00);
@@ -22,7 +25,6 @@ namespace KasjerConsola.Klasy
                 return N50000.wartość + N20000.wartość + N10000.wartość;  
             } 
         }
-
 
         public void ZmieńN50000(int ilośćNominałów)
         {
