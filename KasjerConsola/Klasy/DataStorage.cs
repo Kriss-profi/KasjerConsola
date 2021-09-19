@@ -9,6 +9,7 @@ namespace KasjerConsola.Klasy
 {
     public class DataStorage
     {
+        // czemu static?
         public static void Storage(Sejf sejf)
         {
             Console.Clear();
@@ -17,6 +18,7 @@ namespace KasjerConsola.Klasy
             Console.WriteLine($"{ sejf.OpisN20000()} : {sejf.StanN20000()} szt.");
             Console.WriteLine($"{ sejf.OpisN10000()} : {sejf.StanN10000()} szt.");
             Console.ReadKey();
+            // jeszcze nie zapisano!
 
                 FileStream stream = new FileStream("kasjer.dat", FileMode.Create);
 
@@ -32,6 +34,7 @@ namespace KasjerConsola.Klasy
 
         }
 
+        // czemu zwracamy cos co jest na wejsciu podane i sie nie zmienia?
         public static Sejf Load(Sejf kasetka)
         {
             try
