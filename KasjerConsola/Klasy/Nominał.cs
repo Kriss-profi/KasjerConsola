@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 namespace KasjerConsola.Klasy
 {
 
+    // BEZ POLSKICH LITER! :D 
     public class Nominał
     {
-
-        public string kasior;   // 500, 200, 100 ...
+        // po co kasior? czemu string?
+        public string kasior;   // 500, 200, 100 ... 
         public string waluta;
         decimal nominał;
         public int ilość = 0;
