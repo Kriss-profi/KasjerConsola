@@ -1,38 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
 namespace KasjerConsola.Klasy
 {
     public class DataStorage
     {
-        public static void Storage(Sejf sejf)
+        // Dlaczego akurat static tego nie wiem, poprostu zaadoptowałem czyjąś klasę DataStorage do tego programu.
+        public static void Storage(List<FaceValue> faceValues)
         {
-            Console.Clear();
-            Console.WriteLine("Zapisano: \n");
-            Console.WriteLine($"{ sejf.OpisN50000()} : {sejf.StanN50000()} szt.");
-            Console.WriteLine($"{ sejf.OpisN20000()} : {sejf.StanN20000()} szt.");
-            Console.WriteLine($"{ sejf.OpisN10000()} : {sejf.StanN10000()} szt.");
-            Console.ReadKey();
+            try
+            {
+                Console.Clear();
 
                 FileStream stream = new FileStream("kasjer.dat", FileMode.Create);
 
-                StreamWriter writer = new StreamWriter(stream);
+                StreamWriter writer = new(stream);
 
-                writer.WriteLine(sejf.StanN50000());
-                writer.WriteLine(sejf.StanN20000());
-                writer.WriteLine(sejf.StanN10000());
+                foreach (var item in faceValues)
+                {
+                    writer.WriteLine(item.quantity);
+                }
 
                 writer.Dispose();
 
 
-
+                Console.WriteLine("Zapisano: ");
+                foreach (var item in faceValues)
+                {
+                    Console.WriteLine(item.Nazwa + " " + item.quantity + " szt.");
+                }
+                Console.ReadKey();
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine($"Błąd Zapisu: {exception.Message}");
+                Console.ReadKey();
+            }
         }
 
-        public static Sejf Load(Sejf kasetka)
+        public static void Load(List<FaceValue> faceValues)
         {
             try
             {            
@@ -40,21 +47,22 @@ namespace KasjerConsola.Klasy
 
                 StreamReader reader = new StreamReader(stream);
 
-                kasetka.ZmieńN50000(int.Parse(reader.ReadLine()));
-                kasetka.ZmieńN20000(int.Parse(reader.ReadLine()));
-                kasetka.ZmieńN10000(int.Parse(reader.ReadLine()));
-
+                foreach (FaceValue item in faceValues)
+                {
+                    string iloscString = reader.ReadLine();
+                    bool succes = int.TryParse(iloscString, out int ilosc);
+                    if (succes)
+                    {
+                        item.quantity = ilosc;
+                    }
+                }
                 reader.Dispose();
-
-                return kasetka;
             }
             catch (Exception exception)
             {
                 Console.WriteLine($"Spodziewany błąd: {exception.Message}");
                 Console.ReadKey();
-                return kasetka;
             }
-
         }
     }
 }
