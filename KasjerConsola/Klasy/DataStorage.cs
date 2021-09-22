@@ -7,7 +7,7 @@ namespace KasjerConsola.Klasy
     public class DataStorage
     {
         // Dlaczego akurat static tego nie wiem, poprostu zaadoptowałem czyjąś klasę DataStorage do tego programu.
-        public static void Storage(List<FaceValue> faceValues)
+        public static void Storage(List<FaceValue> faceValues1, List<FaceValue> faceValues2, List<FaceValue> faceValues3)
         {
             try
             {
@@ -17,7 +17,15 @@ namespace KasjerConsola.Klasy
 
                 StreamWriter writer = new(stream);
 
-                foreach (var item in faceValues)
+                foreach (var item in faceValues1)
+                {
+                    writer.WriteLine(item.quantity);
+                }
+                foreach (var item in faceValues2)
+                {
+                    writer.WriteLine(item.quantity);
+                }
+                foreach (var item in faceValues3)
                 {
                     writer.WriteLine(item.quantity);
                 }
@@ -25,8 +33,21 @@ namespace KasjerConsola.Klasy
                 writer.Dispose();
 
 
-                Console.WriteLine("Zapisano: ");
-                foreach (var item in faceValues)
+                Console.WriteLine("Zapisano Wszystkie stany ");
+                Console.WriteLine("KASETKA: ");
+                foreach (var item in faceValues1)
+                {
+                    Console.WriteLine(item.Nazwa + " " + item.quantity + " szt.");
+                }
+                Console.ReadKey();
+                Console.WriteLine("\nSejf DZIENNY: ");
+                foreach (var item in faceValues2)
+                {
+                    Console.WriteLine(item.Nazwa + " " + item.quantity + " szt.");
+                }
+                Console.ReadKey();
+                Console.WriteLine("\nSejf GŁÓWNY: ");
+                foreach (var item in faceValues3)
                 {
                     Console.WriteLine(item.Nazwa + " " + item.quantity + " szt.");
                 }
@@ -39,7 +60,7 @@ namespace KasjerConsola.Klasy
             }
         }
 
-        public static void Load(List<FaceValue> faceValues)
+        public static void Load(List<FaceValue> faceValues1, List<FaceValue> faceValues2, List<FaceValue> faceValues3)
         {
             try
             {            
@@ -47,7 +68,25 @@ namespace KasjerConsola.Klasy
 
                 StreamReader reader = new StreamReader(stream);
 
-                foreach (FaceValue item in faceValues)
+                foreach (FaceValue item in faceValues1)
+                {
+                    string iloscString = reader.ReadLine();
+                    bool succes = int.TryParse(iloscString, out int ilosc);
+                    if (succes)
+                    {
+                        item.quantity = ilosc;
+                    }
+                }
+                foreach (FaceValue item in faceValues2)
+                {
+                    string iloscString = reader.ReadLine();
+                    bool succes = int.TryParse(iloscString, out int ilosc);
+                    if (succes)
+                    {
+                        item.quantity = ilosc;
+                    }
+                }
+                foreach (FaceValue item in faceValues3)
                 {
                     string iloscString = reader.ReadLine();
                     bool succes = int.TryParse(iloscString, out int ilosc);
