@@ -38,7 +38,7 @@ namespace KasjerConsola.Klasy
 
         public string Nazwa { get; set; }
         public string Opis { get; set; }
-        private decimal faceValue;
+        private readonly decimal faceValue;
         public int quantity = 0;
 
         public decimal Value

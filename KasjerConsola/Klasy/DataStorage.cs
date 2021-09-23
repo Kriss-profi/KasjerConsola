@@ -7,13 +7,13 @@ namespace KasjerConsola.Klasy
     public class DataStorage
     {
         // Dlaczego akurat static tego nie wiem, poprostu zaadoptowałem czyjąś klasę DataStorage do tego programu.
-        public static void Storage(List<FaceValue> faceValues1, List<FaceValue> faceValues2, List<FaceValue> faceValues3)
+        public static void Storage(List<FaceValue> faceValues1, List<FaceValue> faceValues2, List<FaceValue> faceValues3, decimal value)
         {
             try
             {
                 Console.Clear();
 
-                FileStream stream = new FileStream("kasjer.dat", FileMode.Create);
+                FileStream stream = new("kasjer.dat", FileMode.Create);
 
                 StreamWriter writer = new(stream);
 
@@ -29,6 +29,7 @@ namespace KasjerConsola.Klasy
                 {
                     writer.WriteLine(item.quantity);
                 }
+                writer.WriteLine(value);
 
                 writer.Dispose();
 
@@ -39,19 +40,16 @@ namespace KasjerConsola.Klasy
                 {
                     Console.WriteLine(item.Nazwa + " " + item.quantity + " szt.");
                 }
-                Console.ReadKey();
                 Console.WriteLine("\nSejf DZIENNY: ");
                 foreach (var item in faceValues2)
                 {
                     Console.WriteLine(item.Nazwa + " " + item.quantity + " szt.");
                 }
-                Console.ReadKey();
                 Console.WriteLine("\nSejf GŁÓWNY: ");
                 foreach (var item in faceValues3)
                 {
                     Console.WriteLine(item.Nazwa + " " + item.quantity + " szt.");
                 }
-                Console.ReadKey();
             }
             catch (Exception exception)
             {
@@ -63,10 +61,10 @@ namespace KasjerConsola.Klasy
         public static void Load(List<FaceValue> faceValues1, List<FaceValue> faceValues2, List<FaceValue> faceValues3)
         {
             try
-            {            
-                FileStream stream = new FileStream("kasjer.dat", FileMode.Open);
+            {
+                FileStream stream = new("kasjer.dat", FileMode.Open);
 
-                StreamReader reader = new StreamReader(stream);
+                StreamReader reader = new(stream);
 
                 foreach (FaceValue item in faceValues1)
                 {
@@ -75,6 +73,7 @@ namespace KasjerConsola.Klasy
                     if (succes)
                     {
                         item.quantity = ilosc;
+                        Program.CascetValue += item.Value;
                     }
                 }
                 foreach (FaceValue item in faceValues2)
@@ -84,6 +83,7 @@ namespace KasjerConsola.Klasy
                     if (succes)
                     {
                         item.quantity = ilosc;
+                        Program.DaySafeValue += item.Value;
                     }
                 }
                 foreach (FaceValue item in faceValues3)
@@ -93,9 +93,15 @@ namespace KasjerConsola.Klasy
                     if (succes)
                     {
                         item.quantity = ilosc;
+                        Program.MainSafeValue += item.Value;
                     }
                 }
+                string valueS = reader.ReadLine();
+                bool succesSV = decimal.TryParse(valueS, out decimal valueD);
+                if (succesSV) { Program.SystemValue = valueD; }
+                
                 reader.Dispose();
+                
             }
             catch (Exception exception)
             {
