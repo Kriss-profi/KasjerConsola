@@ -30,6 +30,8 @@ namespace KasjerConsola
                 ChangeSafeValue();
                 x = Menu();
 
+                // switche mozna w metody pozamieniac...
+                // metoda ktora nie miesci sie na ekranie jest z reguly zla... :( 
                 switch(x)
                 {
                     case 1: { CascetValue = WalletWrite(_cascet, "Kasetka"); break; }
