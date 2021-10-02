@@ -30,14 +30,14 @@ namespace KasjerConsola
                 ChangeSafeValue();
                 x = Menu();
 
-                switch(x)
+                switch (x)
                 {
                     case 1: { CascetValue = WalletWrite(_cascet, "Kasetka"); break; }
                     case 2: { DaySafeValue = WalletWrite(_daySafe, "Sejf dzienny"); break; }
                     case 3: { MainSafeValue = WalletWrite(_mainSafe, "Sejf Główny"); break; }
                     case 4: { CascetValue = WalletReadValue(_cascet, "Kasetka"); break; }
-                    case 5: { DaySafeValue =  WalletReadValue(_daySafe, "Sejf Dzienny"); break; }
-                    case 6: { MainSafeValue =  WalletReadValue(_mainSafe, "Sejf Główny"); break; }
+                    case 5: { DaySafeValue = WalletReadValue(_daySafe, "Sejf Dzienny"); break; }
+                    case 6: { MainSafeValue = WalletReadValue(_mainSafe, "Sejf Główny"); break; }
                     case 7: { FillSystemValue(); break; }
                     case 8: { DataStorage.Storage(_cascet, _daySafe, _mainSafe, SystemValue); break; }
                     default: { break; }
@@ -146,6 +146,10 @@ namespace KasjerConsola
             return walletValue;
         }
 
+        /// <summary>
+        /// Metoda wypełniająca portwel
+        /// </summary>
+        /// <param name="listFaceValues">Portfel</param>
         static void FillTheWallet(List<FaceValue> listFaceValues)
         {
             foreach (FaceValue item in listFaceValues)

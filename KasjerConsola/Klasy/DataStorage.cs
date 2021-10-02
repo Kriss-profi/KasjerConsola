@@ -7,6 +7,13 @@ namespace KasjerConsola.Klasy
     public class DataStorage
     {
         // Dlaczego akurat static tego nie wiem, poprostu zaadoptowałem czyjąś klasę DataStorage do tego programu.
+        /// <summary>
+        /// Zapis wszystkich portweli do pliku ze sprawdzeniem czy kasjer.dat istnieje
+        /// </summary>
+        /// <param name="faceValues1">Portwel 1</param>
+        /// <param name="faceValues2">Portwel 2</param>
+        /// <param name="faceValues3">Portwel 3</param>
+        /// <param name="value">Stan gotówki w systemie</param>
         public static void Storage(List<FaceValue> faceValues1, List<FaceValue> faceValues2, List<FaceValue> faceValues3, decimal value)
         {
             try
@@ -16,40 +23,17 @@ namespace KasjerConsola.Klasy
                 FileStream stream = new("kasjer.dat", FileMode.Create);
 
                 StreamWriter writer = new(stream);
-
-                foreach (var item in faceValues1)
-                {
-                    writer.WriteLine(item.quantity);
-                }
-                foreach (var item in faceValues2)
-                {
-                    writer.WriteLine(item.quantity);
-                }
-                foreach (var item in faceValues3)
-                {
-                    writer.WriteLine(item.quantity);
-                }
+                SaweWallet(writer, faceValues1);
+                SaweWallet(writer, faceValues2);
+                SaweWallet(writer, faceValues3);
                 writer.WriteLine(value);
 
                 writer.Dispose();
 
-
                 Console.WriteLine("Zapisano Wszystkie stany ");
-                Console.WriteLine("KASETKA: ");
-                foreach (var item in faceValues1)
-                {
-                    Console.WriteLine(item.Nazwa + " " + item.quantity + " szt.");
-                }
-                Console.WriteLine("\nSejf DZIENNY: ");
-                foreach (var item in faceValues2)
-                {
-                    Console.WriteLine(item.Nazwa + " " + item.quantity + " szt.");
-                }
-                Console.WriteLine("\nSejf GŁÓWNY: ");
-                foreach (var item in faceValues3)
-                {
-                    Console.WriteLine(item.Nazwa + " " + item.quantity + " szt.");
-                }
+                ReadWallet(faceValues1, "KASETKA");
+                ReadWallet(faceValues2, "Sejf DZIENNY");
+                ReadWallet(faceValues3, "Sejf GŁÓWNY");
             }
             catch (Exception exception)
             {
@@ -57,7 +41,38 @@ namespace KasjerConsola.Klasy
                 Console.ReadKey();
             }
         }
+        /// <summary>
+        /// Metoda zapisująca Wallet do pliku
+        /// </summary>
+        /// <param name="writer">Obiekt typu StreamWriter na potrzeby zapisu w obiekcie typu FileStream</param>
+        /// <param name="faceValues">Portwel, który ma zostać zapisany</param>
+        private static void SaweWallet(StreamWriter writer, List<FaceValue> faceValues)
+        {
+            foreach (var item in faceValues)
+            {
+                writer.WriteLine(item.quantity);
+            }
+        }
+        /// <summary>
+        /// Wypisywanie portwela na ekranie 
+        /// </summary>
+        /// <param name="faceValues">Portwel, który ma zostać wyświetlony</param>
+        /// <param name="v">Opis portwela</param>
+        private static void ReadWallet(List<FaceValue> faceValues, string v)
+        {
+            Console.WriteLine($"\n {v} : ");
+            foreach (var item in faceValues)
+            {
+                Console.WriteLine(item.Nazwa + " " + item.quantity + " szt.");
+            }
+        }
 
+        /// <summary>
+        /// Metoda pobiera dane z pliku kasjer.dat
+        /// </summary>
+        /// <param name="faceValues1">Kasetka</param>
+        /// <param name="faceValues2">Sejf dzienny</param>
+        /// <param name="faceValues3">Sejf główny</param>
         public static void Load(List<FaceValue> faceValues1, List<FaceValue> faceValues2, List<FaceValue> faceValues3)
         {
             try
@@ -101,7 +116,6 @@ namespace KasjerConsola.Klasy
                 if (succesSV) { Program.SystemValue = valueD; }
                 
                 reader.Dispose();
-                
             }
             catch (Exception exception)
             {
