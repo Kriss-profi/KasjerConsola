@@ -10,9 +10,7 @@ namespace KasjerConsola.Klasy
         /// <summary>
         /// Zapis wszystkich portweli do pliku ze sprawdzeniem czy kasjer.dat istnieje
         /// </summary>
-        /// <param name="faceValues1">Portwel 1</param>
-        /// <param name="faceValues2">Portwel 2</param>
-        /// <param name="faceValues3">Portwel 3</param>
+        /// <param name="firma">Klasa firma posiada wszystkie portfele</param>
         /// <param name="value">Stan gotówki w systemie</param>
         public void Save(Firma firma, decimal value)
         {
@@ -30,13 +28,11 @@ namespace KasjerConsola.Klasy
 
                 writer.Dispose();
 
-                //Console.WriteLine("Zapisano Wszystkie stany ");
-                //ReadWallet(firma.Cascet.Values, "KASETKA");
-                //ReadWallet(firma.DaySafe.Values, "Sejf DZIENNY");
-                //ReadWallet(firma.MainSafe.Values, "Sejf GŁÓWNY");
-                
                 // TODO - mozna tak..
-                //firma.Cascet.ReadWallet();
+                firma.WriteAllWallet();
+                //firma.Cascet.WalletWrite();
+                //firma.DaySafe.WalletWrite();
+                //firma.MainSafe.WalletWrite();
             }
             catch (Exception exception)
             {
@@ -56,26 +52,12 @@ namespace KasjerConsola.Klasy
                 writer.WriteLine(item.quantity);
             }
         }
-        /// <summary>
-        /// Wypisywanie portwela na ekranie 
-        /// </summary>
-        /// <param name="faceValues">Portwel, który ma zostać wyświetlony</param>
-        /// <param name="v">Opis portwela</param>
-        private static void ReadWallet(List<FaceValue> faceValues, string v)
-        {
-            Console.WriteLine($"\n {v} : ");
-            foreach (var item in faceValues)
-            {
-                Console.WriteLine(item.Nazwa + " " + item.quantity + " szt.");
-            }
-        }
+
 
         /// <summary>
         /// Metoda pobiera dane z pliku kasjer.dat
         /// </summary>
-        /// <param name="faceValues1">Kasetka</param>
-        /// <param name="faceValues2">Sejf dzienny</param>
-        /// <param name="faceValues3">Sejf główny</param>
+        /// <param name="firma">Klasa firma posiada wszystkie portfele</param>
         public void Load(Firma firma)
         {
             try
@@ -91,7 +73,6 @@ namespace KasjerConsola.Klasy
                     if (succes)
                     {
                         item.quantity = ilosc;
-                        firma.CascetValue += item.Value;
                     }
                 }
                 foreach (FaceValue item in firma.DaySafe.Values)
@@ -101,7 +82,6 @@ namespace KasjerConsola.Klasy
                     if (succes)
                     {
                         item.quantity = ilosc;
-                        //firma.DaySafeValue += item.Value;
                     }
                 }
                 foreach (FaceValue item in firma.MainSafe.Values)
@@ -111,7 +91,6 @@ namespace KasjerConsola.Klasy
                     if (succes)
                     {
                         item.quantity = ilosc;
-                        firma.MainSafeValue += item.Value;
                     }
                 }
                 string valueS = reader.ReadLine();

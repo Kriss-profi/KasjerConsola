@@ -9,9 +9,9 @@ namespace KasjerConsola.Klasy
 {
     public class Wallet
     {
-        public List<FaceValue> Values { get; private set; }
-        private string _name;
-        Helper helper = new Helper();
+        public List<FaceValue> Values { get; set; }
+        private readonly string _name;
+        private readonly Helper helper = new();
         
 
         public Wallet(string name)
@@ -44,13 +44,19 @@ namespace KasjerConsola.Klasy
             return wallet;
         }
 
-        public decimal WalletWrite()        // Wypisanie nominałów portfels z podsumowaniem
+        public void WalletWrite()        // Wypisanie nominałów portfels z podsumowaniem
         {
             Console.Clear();
             decimal walletValue = Calculate();
-            Console.WriteLine("Stan Kasetki: " + helper.FormatValue(walletValue) + " zł.");
+            Cash(walletValue);
             Console.ReadKey();
-            return walletValue;
+        }
+
+        public void WalletWriteMore()        // Wypisanie nominałów portfels z podsumowaniem
+        {
+            decimal walletValue = Calculate();
+            Cash(walletValue);
+            Console.WriteLine();
         }
 
 
@@ -66,7 +72,9 @@ namespace KasjerConsola.Klasy
         private decimal Calculate()
         {
             decimal walletValue = 0;
-            Console.WriteLine(_name);
+            Console.WriteLine("********************************");
+            Console.WriteLine($"          {_name}");
+            Console.WriteLine("********************************");
             foreach (FaceValue item in Values)
             {
                 Console.WriteLine("  " + item.Opis + " * " + helper.IntFormat(item.quantity) + " = " + helper.DoubleFormat(item.Value));
@@ -78,27 +86,32 @@ namespace KasjerConsola.Klasy
         }
 
 
-        // TODO: Move to Wallet - przeniosłem
-        private decimal WalletReadValue(List<FaceValue> listFaceValues, string description)
+        // TODO: Move to Wallet - Done
+        public decimal WalletReadValue()
         {
             Console.Clear();
-            Console.WriteLine(value: $"\n{description}\n");
-            FillTheWallet(listFaceValues);
+            Console.WriteLine(value: $"\n{_name}\n");
+            FillTheWallet();
             Console.Clear();
             decimal walletValue = Calculate();
-            Console.WriteLine("Stan Kasetki: " + helper.FormatValue(walletValue) + " zł.");
+            Cash(walletValue);
             Console.ReadKey();
             return walletValue;
+        }
+
+        private void Cash(decimal walletValue)
+        {
+            Console.WriteLine($"Stan Gotówki:   {helper.FormatValue(walletValue)} zł.");
+            Console.WriteLine("--------------------------------");
         }
 
 
         /// <summary>
         /// Metoda wypełniająca portwel
         /// </summary>
-        /// <param name="listFaceValues">Portfel</param>
-        static void FillTheWallet(List<FaceValue> listFaceValues)
+        private void FillTheWallet()
         {
-            foreach (FaceValue item in listFaceValues)
+            foreach (FaceValue item in Values )
             {
                 string iloscString;
                 Console.Write($"{item.Opis} \t: ");
