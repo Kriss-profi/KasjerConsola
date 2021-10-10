@@ -14,7 +14,7 @@ namespace KasjerConsola.Klasy
         /// <param name="faceValues2">Portwel 2</param>
         /// <param name="faceValues3">Portwel 3</param>
         /// <param name="value">Stan gotówki w systemie</param>
-        public static void Storage(List<FaceValue> faceValues1, List<FaceValue> faceValues2, List<FaceValue> faceValues3, decimal value)
+        public void Save(Firma firma, decimal value)
         {
             try
             {
@@ -23,17 +23,20 @@ namespace KasjerConsola.Klasy
                 FileStream stream = new("kasjer.dat", FileMode.Create);
 
                 StreamWriter writer = new(stream);
-                SaweWallet(writer, faceValues1);
-                SaweWallet(writer, faceValues2);
-                SaweWallet(writer, faceValues3);
+                SaveWallet(writer, firma.Cascet.Values);
+                SaveWallet(writer, firma.DaySafe.Values);
+                SaveWallet(writer, firma.MainSafe.Values);
                 writer.WriteLine(value);
 
                 writer.Dispose();
 
-                Console.WriteLine("Zapisano Wszystkie stany ");
-                ReadWallet(faceValues1, "KASETKA");
-                ReadWallet(faceValues2, "Sejf DZIENNY");
-                ReadWallet(faceValues3, "Sejf GŁÓWNY");
+                //Console.WriteLine("Zapisano Wszystkie stany ");
+                //ReadWallet(firma.Cascet.Values, "KASETKA");
+                //ReadWallet(firma.DaySafe.Values, "Sejf DZIENNY");
+                //ReadWallet(firma.MainSafe.Values, "Sejf GŁÓWNY");
+                
+                // TODO - mozna tak..
+                //firma.Cascet.ReadWallet();
             }
             catch (Exception exception)
             {
@@ -46,7 +49,7 @@ namespace KasjerConsola.Klasy
         /// </summary>
         /// <param name="writer">Obiekt typu StreamWriter na potrzeby zapisu w obiekcie typu FileStream</param>
         /// <param name="faceValues">Portwel, który ma zostać zapisany</param>
-        private static void SaweWallet(StreamWriter writer, List<FaceValue> faceValues)
+        private static void SaveWallet(StreamWriter writer, List<FaceValue> faceValues)
         {
             foreach (var item in faceValues)
             {
@@ -73,7 +76,7 @@ namespace KasjerConsola.Klasy
         /// <param name="faceValues1">Kasetka</param>
         /// <param name="faceValues2">Sejf dzienny</param>
         /// <param name="faceValues3">Sejf główny</param>
-        public static void Load(List<FaceValue> faceValues1, List<FaceValue> faceValues2, List<FaceValue> faceValues3)
+        public void Load(Firma firma)
         {
             try
             {
@@ -81,39 +84,39 @@ namespace KasjerConsola.Klasy
 
                 StreamReader reader = new(stream);
 
-                foreach (FaceValue item in faceValues1)
+                foreach (FaceValue item in firma.Cascet.Values)
                 {
                     string iloscString = reader.ReadLine();
                     bool succes = int.TryParse(iloscString, out int ilosc);
                     if (succes)
                     {
                         item.quantity = ilosc;
-                        Program.CascetValue += item.Value;
+                        firma.CascetValue += item.Value;
                     }
                 }
-                foreach (FaceValue item in faceValues2)
+                foreach (FaceValue item in firma.DaySafe.Values)
                 {
                     string iloscString = reader.ReadLine();
                     bool succes = int.TryParse(iloscString, out int ilosc);
                     if (succes)
                     {
                         item.quantity = ilosc;
-                        Program.DaySafeValue += item.Value;
+                        //firma.DaySafeValue += item.Value;
                     }
                 }
-                foreach (FaceValue item in faceValues3)
+                foreach (FaceValue item in firma.MainSafe.Values)
                 {
                     string iloscString = reader.ReadLine();
                     bool succes = int.TryParse(iloscString, out int ilosc);
                     if (succes)
                     {
                         item.quantity = ilosc;
-                        Program.MainSafeValue += item.Value;
+                        firma.MainSafeValue += item.Value;
                     }
                 }
                 string valueS = reader.ReadLine();
                 bool succesSV = decimal.TryParse(valueS, out decimal valueD);
-                if (succesSV) { Program.SystemValue = valueD; }
+                if (succesSV) { firma.SystemValue = valueD; }
                 
                 reader.Dispose();
             }
